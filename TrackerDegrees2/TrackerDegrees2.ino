@@ -11,9 +11,10 @@
 
 volatile int countPos = 0;
 volatile int countNeg = 0;
-int target = 45;
-volatile int count = 0;
-int deg = 0;
+int target = 45; //target (in degrees) for tracker to move to
+int cal = 112; //counts per degree
+volatile int count = 0; //number of pulses from hall effect sensor on slew drive
+int deg = 0; //degrees moved
 
 void setup() {
   // put your setup code here, to run once
@@ -42,7 +43,7 @@ void loop() {
   while(count < target*112)
   {
     digitalWrite(slew_cw, LOW);
-    if(count >= 112*deg)
+    if(count >= cal*deg)
     {
       Serial.print("degrees = ");
       Serial.print(deg);
@@ -50,8 +51,6 @@ void loop() {
       deg++;
     }
   }
-  Serial.print(target);
-  Serial.print("\n");
   digitalWrite(slew_cw, HIGH);
   
   if(digitalRead(button4) == HIGH)
@@ -64,19 +63,15 @@ void loop() {
   else
     digitalWrite(actuator_extend, HIGH);
 
-  if(digitalRead(button2) == HIGH) {
+  if(digitalRead(button2) == HIGH) 
     digitalWrite(slew_cw, LOW);    
-  }
-  else {
+  else 
     digitalWrite(slew_cw, HIGH);
-  }
   
-  if(digitalRead(button1) == HIGH) {
+  if(digitalRead(button1) == HIGH) 
     digitalWrite(slew_ccw, LOW);
-  }
-  else {
+  else 
     digitalWrite(slew_ccw, HIGH);  
-  }
 }
 
 void magnet_detect() {
