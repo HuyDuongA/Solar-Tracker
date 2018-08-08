@@ -16,7 +16,7 @@ int cal = 112; //counts per degree
 volatile int count = 0; //number of pulses from hall effect sensor on slew drive
 int deg = 0; //degrees moved
 int absp = 45;
-boolean direction = true; //true for clockwise, false for counter-clockwise
+boolean dir = true; //true for clockwise, false for counter-clockwise
 
 
 void setup() {
@@ -43,35 +43,9 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  while(absp < target)
-  {
-    digitalWrite(slew_cw, LOW);
-    direction = true;
-    if(countPos - countNeg >= cal*deg)
-    {
-      Serial.print("degrees = ");
-      Serial.print(deg);
-      Serial.print("\n");
-      deg++;
-      absp++;
-    }
-  }
-  digitalWrite(slew_cw, HIGH);
+  forward(target);
   
-  while(absp > target)
-  {
-    digitalWrite(slew_ccw, LOW);
-    direction = false;
-    if(countPos - countNeg <= cal*deg)
-    {
-      Serial.print("degrees = ");
-      Serial.print(deg);
-      Serial.print("\n");
-      deg--;
-      absp--;
-    }
-  }
-  digitalWrite(slew_ccw, HIGH);
+  backward(target);
   
   if(digitalRead(button4) == HIGH)
     digitalWrite(actuator_retract, LOW);
@@ -85,23 +59,57 @@ void loop() {
 
   if(digitalRead(button2) == HIGH) {
     digitalWrite(slew_cw, LOW);   
-    direction = true; 
+    dir = true; 
   }
   else 
     digitalWrite(slew_cw, HIGH);
   
   if(digitalRead(button1) == HIGH) {
     digitalWrite(slew_ccw, LOW);
-    direction = false;
+    dir = false;
   }
   else 
     digitalWrite(slew_ccw, HIGH);  
 }
 
 void magnet_detect() {
-  if(direction == true)
+  if(dir == true)
     countPos++;
   else
     countNeg++;
+}
+
+void forward(int targ) {
+  while(absp < targ)
+  {
+    digitalWrite(slew_cw, LOW);
+    dir = true;
+    if(countPos - countNeg >= cal*deg)
+    {
+      Serial.print("degrees = ");
+      Serial.print(deg);
+      Serial.print("\n");
+      deg++;
+      absp++;
+    }
+  }
+  digitalWrite(slew_cw, HIGH);
+}
+
+void backward(int targ) {
+  while(absp > targ)
+  {
+    digitalWrite(slew_ccw, LOW);
+    dir = false;
+    if(countPos - countNeg <= cal*deg)
+    {
+      Serial.print("degrees = ");
+      Serial.print(deg);
+      Serial.print("\n");
+      deg--;
+      absp--;
+    }
+  }
+  digitalWrite(slew_ccw, HIGH);
 }
 
