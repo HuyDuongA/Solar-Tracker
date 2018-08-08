@@ -11,10 +11,13 @@
 
 volatile int countPos = 0;
 volatile int countNeg = 0;
-int target = 45; //target (in degrees) for tracker to move to
+int target = 90; //target (in degrees) for tracker to move to
 int cal = 112; //counts per degree
 volatile int count = 0; //number of pulses from hall effect sensor on slew drive
 int deg = 0; //degrees moved
+int absp = 45;
+boolean direction = true; //true for clockwise, false for counter-clockwise
+
 
 void setup() {
   // put your setup code here, to run once
@@ -40,18 +43,35 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  while(count < target*112)
+  while(absp < target)
   {
     digitalWrite(slew_cw, LOW);
-    if(count >= cal*deg)
+    direction = true;
+    if(countPos - countNeg >= cal*deg)
     {
       Serial.print("degrees = ");
       Serial.print(deg);
       Serial.print("\n");
       deg++;
+      absp++;
     }
   }
   digitalWrite(slew_cw, HIGH);
+  
+  while(absp > target)
+  {
+    digitalWrite(slew_ccw, LOW);
+    direction = false;
+    if(countPos - countNeg <= cal*deg)
+    {
+      Serial.print("degrees = ");
+      Serial.print(deg);
+      Serial.print("\n");
+      deg--;
+      absp--;
+    }
+  }
+  digitalWrite(slew_ccw, HIGH);
   
   if(digitalRead(button4) == HIGH)
     digitalWrite(actuator_retract, LOW);
@@ -63,18 +83,25 @@ void loop() {
   else
     digitalWrite(actuator_extend, HIGH);
 
-  if(digitalRead(button2) == HIGH) 
-    digitalWrite(slew_cw, LOW);    
+  if(digitalRead(button2) == HIGH) {
+    digitalWrite(slew_cw, LOW);   
+    direction = true; 
+  }
   else 
     digitalWrite(slew_cw, HIGH);
   
-  if(digitalRead(button1) == HIGH) 
+  if(digitalRead(button1) == HIGH) {
     digitalWrite(slew_ccw, LOW);
+    direction = false;
+  }
   else 
     digitalWrite(slew_ccw, HIGH);  
 }
 
 void magnet_detect() {
-  count++;
+  if(direction == true)
+    countPos++;
+  else
+    countNeg++;
 }
 
