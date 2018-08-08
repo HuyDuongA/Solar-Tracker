@@ -33,7 +33,6 @@ void setup() {
   digitalWrite(button1, LOW);
   Serial.begin(9600);
   attachInterrupt(digitalPinToInterrupt(2), magnet_detect, FALLING);
-  delay(1000);
 }
 
 void loop() {
