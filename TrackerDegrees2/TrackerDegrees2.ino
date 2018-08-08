@@ -11,6 +11,8 @@
 
 volatile int countPos = 0;
 volatile int countNeg = 0;
+int target = 45;
+volatile int count = 0;
 int deg = 0;
 
 void setup() {
@@ -33,11 +35,24 @@ void setup() {
   digitalWrite(button1, LOW);
   Serial.begin(9600);
   attachInterrupt(digitalPinToInterrupt(2), magnet_detect, FALLING);
-  delay(1000);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
+  while(count < target*112)
+  {
+    digitalWrite(slew_cw, LOW);
+    if(count >= 112*deg)
+    {
+      Serial.print("degrees = ");
+      Serial.print(deg);
+      Serial.print("\n");
+      deg++;
+    }
+  }
+  Serial.print(target);
+  Serial.print("\n");
+  digitalWrite(slew_cw, HIGH);
   
   if(digitalRead(button4) == HIGH)
     digitalWrite(actuator_retract, LOW);
@@ -51,13 +66,6 @@ void loop() {
 
   if(digitalRead(button2) == HIGH) {
     digitalWrite(slew_cw, LOW);    
-    if(countPos - countNeg >= 112*deg)
-    {
-      Serial.print("degrees = ");
-      Serial.print(deg);
-      Serial.print("\n");
-      deg++;
-    }
   }
   else {
     digitalWrite(slew_cw, HIGH);
@@ -65,13 +73,6 @@ void loop() {
   
   if(digitalRead(button1) == HIGH) {
     digitalWrite(slew_ccw, LOW);
-    if(countPos - countNeg <= 112*deg)
-    {
-      Serial.print("degrees = ");
-      Serial.print(deg);
-      Serial.print("\n");
-      deg--;
-    }
   }
   else {
     digitalWrite(slew_ccw, HIGH);  
@@ -79,9 +80,6 @@ void loop() {
 }
 
 void magnet_detect() {
-  if(digitalRead(button2) == HIGH)
-    countPos++;
-  if(digitalRead(button1) == HIGH)
-    countNeg++;
+  count++;
 }
 
