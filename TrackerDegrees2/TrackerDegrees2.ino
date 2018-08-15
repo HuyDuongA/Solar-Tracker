@@ -96,7 +96,7 @@ void forward(int targ) {
   digitalWrite(slew_cw, HIGH);
 }
 
-void backward(int targ) {
+void backward(int targ) { //don't change global var target in this function
   while(absp > targ)
   {
     digitalWrite(slew_ccw, LOW);
