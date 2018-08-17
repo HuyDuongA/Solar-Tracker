@@ -23,7 +23,7 @@ void setup() {
 }
 
 void loop() {
-  const char text[] = "Hello World";
+  const char text[] = "It's Huy";
   radio.write(&text, sizeof(text));
-  delay(1000);
+  delay(3000);
 }
