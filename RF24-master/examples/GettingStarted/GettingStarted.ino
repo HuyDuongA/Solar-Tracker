@@ -6,11 +6,11 @@
 */
 
 #include <SPI.h>
-#include "RF24.h"
+#include <RF24.h>
 
 /****************** User Config ***************************/
 /***      Set this radio as radio number 0 or 1         ***/
-bool radioNumber = 0;
+bool radioNumber = 1;
 
 /* Hardware configuration: Set up nRF24L01 radio on SPI bus plus pins 7 & 8 */
 RF24 radio(7,8);
@@ -19,10 +19,10 @@ RF24 radio(7,8);
 byte addresses[][6] = {"1Node","2Node"};
 
 // Used to control whether this node is sending or receiving
-bool role = 0;
+bool role = 1;
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   Serial.println(F("RF24/examples/GettingStarted"));
   Serial.println(F("*** PRESS 'T' to begin transmitting to the other node"));
   
@@ -46,7 +46,11 @@ void setup() {
 }
 
 void loop() {
-  
+
+Serial.print("radio.available: ");
+Serial.println(radio.available());
+Serial.print("Serial.available: ");
+Serial.println(Serial.available());
   
 /****************** Ping Out Role ***************************/  
 if (role == 1)  {
@@ -57,15 +61,18 @@ if (role == 1)  {
     Serial.println(F("Now sending"));
 
     unsigned long start_time = micros();                             // Take the time, and send it.  This will block until complete
+    Serial.println(F("Here1"));  
      if (!radio.write( &start_time, sizeof(unsigned long) )){
+       Serial.println(F("Here2")); 
        Serial.println(F("failed"));
      }
-        
+    Serial.println("Here3");    
     radio.startListening();                                    // Now, continue listening
     
     unsigned long started_waiting_at = micros();               // Set up a timeout period, get the current microseconds
     boolean timeout = false;                                   // Set up a variable to indicate if a response was received or not
-    
+    Serial.print("in role = 1 radio.available: ");
+    Serial.println(radio.available());
     while ( ! radio.available() ){                             // While nothing is received
       if (micros() - started_waiting_at > 200000 ){            // If waited longer than 200ms, indicate timeout and exit while loop
           timeout = true;

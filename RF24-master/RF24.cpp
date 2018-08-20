@@ -41,7 +41,7 @@ void RF24::csn(bool mode)
       #if !defined (SOFTSPI)	
 		_SPI.setBitOrder(MSBFIRST);
 		_SPI.setDataMode(SPI_MODE0);
-		_SPI.setClockDivider(SPI_CLOCK_DIV2);
+		_SPI.setClockDivider(SPI_CLOCK_DIV4);
       #endif
 #elif defined (RF24_RPi)
       if(!mode)
