@@ -19,7 +19,7 @@ int integer = 0;
 void setup() {
   Serial.begin(9600);
   radio.begin();
-  radio.openReadingPipe(0, address);
+  radio.openReadingPipe(1, address);
   radio.setPALevel(RF24_PA_MIN);
   radio.startListening();
 }

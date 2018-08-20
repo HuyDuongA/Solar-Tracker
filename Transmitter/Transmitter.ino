@@ -16,6 +16,7 @@ RF24 radio(7, 8); // CE, CSN
 const byte address[6] = "00001";
 
 void setup() {
+  Serial.begin(9600);
   radio.begin();
   radio.openWritingPipe(address);
   radio.setPALevel(RF24_PA_MIN);
@@ -23,7 +24,8 @@ void setup() {
 }
 
 void loop() {
-  const char text[] = "It's Huy";
-  radio.write(&text, sizeof(text));
-  delay(3000);
+  int integer = 409;
+  radio.write(&integer, sizeof(integer));
+  Serial.println(integer);
+  delay(1000);
 }
