@@ -22,8 +22,10 @@ RHReliableDatagram manager(driver, CLIENT_ADDRESS);
 void setup() 
 {
   Serial.begin(9600);
+
   if (!manager.init())
     Serial.println("init failed");
+
 }
 
 uint8_t data[] = "Hello World!";
