@@ -141,7 +141,7 @@ public:
    */
   bool isChipConnected();
 
-  /**
+  /*
    * Start listening on the pipes opened for reading.
    *
    * 1. Be sure to call openReadingPipe() first.  
@@ -184,7 +184,7 @@ public:
    * Read the available payload
    *
    * The size of data read is the fixed payload size, see getPayloadSize()
-   *
+  *
    * @note I specifically chose 'void*' as a data type to make it easier
    * for beginners to use.  No casting needed.
    *

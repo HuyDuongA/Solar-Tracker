@@ -22,13 +22,15 @@ void setup() {
   radio.openReadingPipe(1, address);
   radio.setPALevel(RF24_PA_MIN);
   radio.startListening();
+  Serial.print("isChipConnected: ");
+  Serial.println(radio.isChipConnected());
 }
 
 void loop() {
   if (radio.available()) {
-    Serial.println(radio.available());
+    //Serial.println(radio.available());
     radio.read(&integer, sizeof(integer));
-    Serial.print("h");
-    Serial.println(integer);
+    //Serial.print("h");
+    //Serial.println(integer);
   }
 }
