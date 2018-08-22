@@ -1,21 +1,21 @@
 //#define slew_drive
-#define actuator_retract 12
-#define actuator_extend 8
-#define slew_cw 6
-#define slew_ccw 4
-#define button4 9 //controls actuator retract
-#define button3 3 //controls actuator extend
-#define button2 7 //controls slew clockwise
-#define button1 5 //controls slew counter-clockwise
+#define actuator_retract 22
+#define actuator_extend 23
+#define slew_cw 26
+#define slew_ccw 28
+#define button4 24 //controls actuator retract
+#define button3 29 //controls actuator extend
+#define button2 25 //controls slew clockwise
+#define button1 27 //controls slew counter-clockwise
 #define hall_sensor 2
 
 volatile int countPos = 0;
 volatile int countNeg = 0;
-int target = 90; //target (in degrees) for tracker to move to
+int target = 45; //target (in degrees) for tracker to move to
 int cal = 112; //counts per degree
 volatile int count = 0; //number of pulses from hall effect sensor on slew drive
 int deg = 0; //degrees moved
-int absp = 45;
+int absp = 0;
 boolean dir = true; //true for clockwise, false for counter-clockwise
 
 
@@ -86,10 +86,10 @@ void forward(int targ) {
     dir = true;
     if(countPos - countNeg >= cal*deg)
     {
+      deg++;
       Serial.print("degrees = ");
       Serial.print(deg);
       Serial.print("\n");
-      deg++;
       absp++;
     }
   }
@@ -103,10 +103,10 @@ void backward(int targ) { //don't change global var target in this function
     dir = false;
     if(countPos - countNeg <= cal*deg)
     {
+      deg--;
       Serial.print("degrees = ");
       Serial.print(deg);
       Serial.print("\n");
-      deg--;
       absp--;
     }
   }

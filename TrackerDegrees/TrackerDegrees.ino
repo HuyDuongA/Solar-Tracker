@@ -7,7 +7,7 @@
 #define button3 29 //controls actuator extend
 #define button2 25 //controls slew clockwise
 #define button1 27 //controls slew counter-clockwise
-#define hall_sensor 30
+#define hall_sensor 2
 
 volatile int countPos = 0;
 volatile int countNeg = 0;
