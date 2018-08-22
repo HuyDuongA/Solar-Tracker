@@ -36,6 +36,7 @@ uint8_t buf[RH_NRF24_MAX_MESSAGE_LEN];
 
 void loop()
 {
+  Serial.println(manager.available());
   if (manager.available())
   {
     // Wait for a message addressed to us from the client

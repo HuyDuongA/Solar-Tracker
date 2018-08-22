@@ -11,7 +11,7 @@
 #include <nRF24L01.h>
 #include <RF24.h>
 
-RF24 radio(7, 8); // CE, CSN
+RF24 radio(53, 48); // CE, CSN
 
 const byte address[6] = "00001";
 
@@ -25,6 +25,7 @@ void setup() {
 
 void loop() {
   int integer = 409;
+  //Serial.println(integer);
   radio.write(&integer, sizeof(integer));
   Serial.println(integer);
   delay(1000);

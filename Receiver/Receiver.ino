@@ -9,11 +9,12 @@
 
 #include <SPI.h>
 #include <nRF24L01.h>
-#include <RF24.h>
+#include "RF24.h"
 
 RF24 radio(7, 8); // CE, CSN
 
 const byte address[6] = "00001";
+int integer = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -21,13 +22,15 @@ void setup() {
   radio.openReadingPipe(1, address);
   radio.setPALevel(RF24_PA_MIN);
   radio.startListening();
+  Serial.print("isChipConnected: ");
+  Serial.println(radio.isChipConnected());
 }
 
 void loop() {
   if (radio.available()) {
-    char text[32] = "";
-    radio.read(&text, sizeof(text));
-    Serial.print("h");
-    Serial.println(text);
+    //Serial.println(radio.available());
+    radio.read(&integer, sizeof(integer));
+    //Serial.print("h");
+    //Serial.println(integer);
   }
 }
