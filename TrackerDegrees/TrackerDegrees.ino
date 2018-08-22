@@ -1,3 +1,4 @@
+//this code only works with buttons, does not take written inputs
 //#define slew_drive
 #define actuator_retract 22
 #define actuator_extend 23

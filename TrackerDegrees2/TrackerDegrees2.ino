@@ -1,4 +1,6 @@
-//#define slew_drive
+//code to move tracker based on given inputs, or with buttons 
+//buttons do not change absolute input
+
 #define actuator_retract 22
 #define actuator_extend 23
 #define slew_cw 26
@@ -49,7 +51,8 @@ void loop() {
   // put your main code here, to run repeatedly:
   forward(target);                          //move actuator forward if position is less than target
   backward(target);                         //move actuator backward if position is greater than target
-  
+
+  //BUTTONS DO NOT CHANGE ABSOLUTE POSITION VARIABLE
   if(digitalRead(button4) == HIGH)          //retract actuator when button4 is pressed
     digitalWrite(actuator_retract, LOW);
   else
