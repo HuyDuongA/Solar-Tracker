@@ -22,10 +22,16 @@ byte addresses[][6] = {"1Node","2Node"};
 bool role = 0;
 
 void setup() {
+<<<<<<< HEAD
+  
+  Serial.begin(115200);
+=======
   Serial.begin(9600);
+>>>>>>> 42647f3f836cdf060af56c5d3175e67570122d2b
   Serial.println(F("RF24/examples/GettingStarted"));
   Serial.println(F("*** PRESS 'T' to begin transmitting to the other node"));
-  
+  //pinMode(53, OUTPUT);
+  while(!Serial);
   radio.begin();
 
   // Set the PA Level low to prevent power supply related issues since this is a
@@ -110,9 +116,14 @@ if (role == 1)  {
                                                                     // Variable for the received timestamp
       //while (radio.available()) {                                   // While there is data ready
         radio.read( &got_time, sizeof(unsigned long) );             // Get the payload
+<<<<<<< HEAD
+      }
+      
+=======
       //}
       //Serial.print("got_time: ");
       //Serial.println(got_time);
+>>>>>>> 42647f3f836cdf060af56c5d3175e67570122d2b
       radio.stopListening();                                        // First, stop listening so we can talk   
       radio.write( &got_time, sizeof(unsigned long) );              // Send the final one back.      
       //Serial.println("It got to here!");

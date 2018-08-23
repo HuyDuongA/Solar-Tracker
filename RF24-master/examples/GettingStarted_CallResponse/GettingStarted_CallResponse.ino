@@ -13,11 +13,12 @@
  */
  
 #include <SPI.h>
-#include "RF24.h"
+#include <nRF24L01.h>
+#include <RF24.h>
 
 /****************** User Config ***************************/
 /***      Set this radio as radio number 0 or 1         ***/
-bool radioNumber = 0;
+bool radioNumber = 1;
 
 /* Hardware configuration: Set up nRF24L01 radio on SPI bus plus pins 7 & 8 */
 RF24 radio(7,8);
@@ -29,7 +30,7 @@ byte addresses[][6] = {"1Node","2Node"};              // Radio pipe addresses fo
 // in this system.  Doing so greatly simplifies testing.  
 typedef enum { role_ping_out = 1, role_pong_back } role_e;                 // The various roles supported by this sketch
 const char* role_friendly_name[] = { "invalid", "Ping out", "Pong back"};  // The debug-friendly names of those roles
-role_e role = role_pong_back;                                              // The role of the current running sketch
+role_e role = role_ping_out;                                              // The role of the current running sketch
 
 byte counter = 1;                                                          // A single byte to keep track of the data being sent back and forth
 
@@ -69,13 +70,13 @@ void loop(void) {
 
     byte gotByte;                                           // Initialize a variable for the incoming response
     
-    radio.stopListening();                                  // First, stop listening so we can talk.      
+    radio.stopListening();  // First, stop listening so we can talk.      
     Serial.print(F("Now sending "));                         // Use a simple byte counter as payload
     Serial.println(counter);
     
     unsigned long time = micros();                          // Record the current microsecond count   
                                                             
-    if ( radio.write(&counter,1) ){                         // Send the counter variable to the other radio 
+    if ( radio.write(&counter,sizeof(counter)) ){                         // Send the counter variable to the other radio 
         if(!radio.available()){                             // If nothing in the buffer, we got an ack but it is blank
             Serial.print(F("Got blank response. round-trip delay: "));
             Serial.print(micros()-time);

@@ -1,12 +1,13 @@
+//this code only works with buttons, does not take written inputs
 //#define slew_drive
-#define actuator_retract 12
-#define actuator_extend 8
-#define slew_cw 6
-#define slew_ccw 4
-#define button4 9 //controls actuator retract
-#define button3 3 //controls actuator extend
-#define button2 7 //controls slew clockwise
-#define button1 5 //controls slew counter-clockwise
+#define actuator_retract 22
+#define actuator_extend 23
+#define slew_cw 26
+#define slew_ccw 28
+#define button4 24 //controls actuator retract
+#define button3 29 //controls actuator extend
+#define button2 25 //controls slew clockwise
+#define button1 27 //controls slew counter-clockwise
 #define hall_sensor 2
 
 volatile int countPos = 0;

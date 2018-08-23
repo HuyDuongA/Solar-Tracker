@@ -11,23 +11,26 @@
 #include <nRF24L01.h>
 #include <RF24.h>
 
-RF24 radio(7, 8); // CE, CSN
+RF24 radio(53, 48); // CE, CSN
 
 const byte address[6] = "00001";
 
 void setup() {
   Serial.begin(9600);
   radio.begin();
-  radio.setAutoAck(false);
-  radio.setDataRate(RF24_250KBPS);
   radio.openWritingPipe(address);
   radio.setPALevel(RF24_PA_MIN);
-  radio.printDetails();
   radio.stopListening();
 }
 
 void loop() {
   int integer = 409;
+<<<<<<< HEAD
   radio.write(&integer, sizeof(integer));
+=======
+  //Serial.println(integer);
+  radio.write(&integer, sizeof(integer));
+  Serial.println(integer);
+>>>>>>> 18046be4d4dac2a9c3893f834d1db562c8e5c220
   delay(1000);
 }
