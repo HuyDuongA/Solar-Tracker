@@ -28,8 +28,6 @@ void setup() {
 
 void loop() {
   int integer = 409;
-  Serial.print("radio.write: ");
-  Serial.println(radio.write(&integer, sizeof(integer)));
-  Serial.println(integer);
+  radio.write(&integer, sizeof(integer));
   delay(1000);
 }
