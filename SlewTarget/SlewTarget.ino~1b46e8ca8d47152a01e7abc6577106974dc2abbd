@@ -11,9 +11,9 @@
 #define button1 27      //controls slew counter-clockwise
 #define hall_sensor 2
 
-volatile int countPos = 0;    //counts in the positive direction
-volatile int countNeg = 0;    //counts in the negative direction
-int target = 45;              //target (in degrees) for tracker to move to
+volatile int countPos = 0;    //counts in the positive direction (cw)
+volatile int countNeg = 0;    //counts in the negative direction (ccw)
+int target =  -45;              //target (in degrees) for tracker to move to
 int cal = 112;                //counts per degree
 volatile int count = 0;       //number of pulses from hall effect sensor on slew drive
 int deg = 0;                  //degrees moved from initial position
@@ -49,8 +49,8 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  forward(target);                          //move actuator forward if position is less than target
-  backward(target);                         //move actuator backward if position is greater than target
+  forward(target);                          //move slew cw if position is less than target
+  backward(target);                         //move slew ccw backward if position is greater than target
 
   //BUTTONS DO NOT CHANGE ABSOLUTE POSITION VARIABLE
   if(digitalRead(button4) == HIGH)          //retract actuator when button4 is pressed
@@ -85,7 +85,7 @@ void magnet_detect() {                      //called when hall signal detected
     countNeg++;
 }
 
-void forward(int targ) {        //move actuator forward if position is less than target
+void forward(int targ) {        //move slew cw if position is less than target
   while(absp < targ)            //don't change global var target in this function
   {
     digitalWrite(slew_cw, LOW);
@@ -102,7 +102,7 @@ void forward(int targ) {        //move actuator forward if position is less than
   digitalWrite(slew_cw, HIGH);
 }
 
-void backward(int targ) {       //move actuator backward if position is greater than target
+void backward(int targ) {       //move slew ccw if position is greater than target
   while(absp > targ)            //don't change global var target in this function
   {
     digitalWrite(slew_ccw, LOW);
