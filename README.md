@@ -36,7 +36,7 @@ If an error code about missing library appears when you run our program, then th
 
 ## Authors
 
-Huy Duong - 4th Computer Engineering Student at Cal Poly
+Huy Duong - 4th Computer Engineering Student at Cal Poly <br />
 Trent Hamilton - 2nd Mechanical Engineering Student at Cal Poly
 
 
