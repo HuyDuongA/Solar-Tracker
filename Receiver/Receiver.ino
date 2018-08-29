@@ -10,26 +10,24 @@
 #include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
+#include <printf.h>
 
 RF24 radio(9, 10); // CE, CSN
 
 const byte address[6] = "00001";
-int integer = 0;
+char text[32] = "";
 
 void setup() {
   Serial.begin(9600);
   radio.begin();
-  radio.setAutoAck(false);
-  radio.setDataRate(RF24_250KBPS);
-  
-  radio.openReadingPipe(1, address);
+  radio.openReadingPipe(0, address);
   radio.startListening();
-
-  radio.printDetails();
 }
 
+
 void loop() {
-  while (radio.available()) {
-    radio.read(&integer, sizeof(integer));
+  if(radio.available()){
+    radio.read(&text, sizeof(text));
+    Serial.println(text);
   }
 }

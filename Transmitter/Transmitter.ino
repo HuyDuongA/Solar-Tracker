@@ -24,8 +24,9 @@ void setup() {
 }
 
 void loop() {
-  char text[32] = "hey";
+  //char text[32] = "hey";
+  int text = 5;
   radio.write(&text, sizeof(text));
-  //Serial.println(integer);
+  Serial.println(text);
   delay(1000);
 }
