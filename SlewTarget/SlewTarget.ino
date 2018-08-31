@@ -50,6 +50,7 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   //forward(target);                          //move slew cw if position is less than target
+  
   //backward(target);                         //move slew ccw backward if position is greater than target
 
   //BUTTONS DO NOT CHANGE ABSOLUTE POSITION VARIABLE

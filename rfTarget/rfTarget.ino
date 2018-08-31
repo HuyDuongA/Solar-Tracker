@@ -15,6 +15,10 @@
 #include <RF24.h>
 #include <printf.h>
 
+//actuator lengths used to calculate from angle
+int b = 22.25;                
+int a = 6.25;
+
 //SLEW variables
 volatile int countPosS = 0;    //counts in the positive direction (cw)
 volatile int countNegS = 0;    //counts in the negative direction (ccw)
@@ -28,8 +32,9 @@ boolean dirS = true;           //true for clockwise, false for counter-clockwise
 //ACTUATOR variables
 volatile int countPosA = 0;    //counts in the positive direction (extend)
 volatile int countNegA = 0;    //counts in the negative direction (retract)
+int targetL = 0;          //target in inches for actuator to extend
 int targetA =  0;              //target (in degrees) for tracker to move to
-int calA = 0; //????                  //counts per degree
+int calA = 203; //????                  //counts per degree
 volatile int countA = 0;       //number of pulses from hall effect sensor on actuator
 int degA = 0;                  //degrees moved from initial position
 int abspA = 0;                 //apsolute position
@@ -63,7 +68,7 @@ void setup() {
   
   Serial.begin(9600);
   attachInterrupt(digitalPinToInterrupt(2), magnet_detectS, FALLING); //interrupt on pin 2 to detect hall sensor
-  //attachInterrupt(digitalPinToInterrupt(????), magnet_detectA, FALLING); //interrupt on pin ??? to detect hall sensor
+  attachInterrupt(digitalPinToInterrupt(3), magnet_detectA, FALLING); //interrupt on pin 3 to detect hall sensor
   
   radio.begin();
   radio.openReadingPipe(0, address);
@@ -73,22 +78,30 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
-   if(radio.available()){
+  /**if(radio.available()){
       radio.read(&targetS, sizeof(targetS));
       Serial.println(targetS);
-    }
+    }**/
+
+  targetL = sqrt(b*b+a*a-2*a*b*cos(targetA));
   
   forward(targetS);                          //move slew cw if position is less than target
   backward(targetS);                         //move slew ccw backward if position is greater than target
+  extend(targetL);                           //extend actuator if position less than target
+  retract(targetL);                          //retract actuator if position greater than target
 
   //BUTTONS DO NOT CHANGE ABSOLUTE POSITION VARIABLE
-  if(digitalRead(button4) == HIGH)          //retract actuator when button4 is pressed
+  if(digitalRead(button4) == HIGH)   {       //retract actuator when button4 is pressed
+    dirA = false;
     digitalWrite(actuator_retract, LOW);
+  }
   else
     digitalWrite(actuator_retract, HIGH);
     
-  if(digitalRead(button3) == HIGH)          //extend actuator when button3 is pressed
+  if(digitalRead(button3) == HIGH)  {        //extend actuator when button3 is pressed
+    dirA = true;
     digitalWrite(actuator_extend, LOW);
+  }
   else
     digitalWrite(actuator_extend, HIGH);
 
@@ -129,7 +142,7 @@ void forward(int targ) {        //move slew cw if position is less than target
     if(countPosS - countNegS >= calS*degS)
     {
       degS++;
-      Serial.print("degrees = ");
+      Serial.print("degrees slew= ");
       Serial.print(degS);
       Serial.print("\n");
       abspS++;
@@ -146,7 +159,7 @@ void backward(int targ) {       //move slew ccw if position is greater than targ
     if(countPosS - countNegS <= calS*degS)
     {
       degS--;
-      Serial.print("degrees = ");
+      Serial.print("degrees slew = ");
       Serial.print(degS);
       Serial.print("\n");
       abspS--;
@@ -163,7 +176,7 @@ void extend(int targ) {
       if(countPosA - countNegA >= calA*degA)
       {
         degA++;
-        Serial.print("degrees = ");
+        Serial.print("degrees actuator = ");
         Serial.print(degA);
         Serial.print("\n");
         abspA++;
@@ -180,7 +193,7 @@ void retract(int targ) {
     if(countPosA - countNegA <= calA*degA)
     {
       degA--;
-      Serial.print("degrees = ");
+      Serial.print("degrees actuator = ");
       Serial.print(degA);
       Serial.print("\n");
       abspA--;
