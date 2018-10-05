@@ -13,7 +13,7 @@
 
 volatile int countPos = 0;    //counts in the positive direction (cw)
 volatile int countNeg = 0;    //counts in the negative direction (ccw)
-int target =  -45;              //target (in degrees) for tracker to move to
+int target =  -45;            //target (in degrees) for tracker to move to
 int cal = 112;                //counts per degree
 volatile int count = 0;       //number of pulses from hall effect sensor on slew drive
 int deg = 0;                  //degrees moved from initial position
