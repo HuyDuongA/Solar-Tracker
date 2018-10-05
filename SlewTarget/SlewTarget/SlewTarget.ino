@@ -49,8 +49,9 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  forward(target);                          //move slew cw if position is less than target
-  backward(target);                         //move slew ccw backward if position is greater than target
+  //forward(target);                          //move slew cw if position is less than target
+  
+  //backward(target);                         //move slew ccw backward if position is greater than target
 
   //BUTTONS DO NOT CHANGE ABSOLUTE POSITION VARIABLE
   if(digitalRead(button4) == HIGH)          //retract actuator when button4 is pressed
@@ -118,4 +119,3 @@ void backward(int targ) {       //move slew ccw if position is greater than targ
   }
   digitalWrite(slew_ccw, HIGH);
 }
-

@@ -10,12 +10,11 @@
 #include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
-#include <printf.h>
 
 RF24 radio(9, 10); // CE, CSN
 
 const byte address[6] = "00001";
-char text[32] = "";
+int text = 0;
 
 void setup() {
   Serial.begin(9600);
