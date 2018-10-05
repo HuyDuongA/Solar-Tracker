@@ -1,5 +1,8 @@
 //code to move tracker based on given inputs, or with buttons 
 //buttons do not change absolute input
+#include <SPI.h>
+#include <nRF24L01.h>
+#include <RF24.h>
 
 #define actuator_retract 22
 #define actuator_extend 23
@@ -13,13 +16,17 @@
 
 volatile int countPos = 0;    //counts in the positive direction
 volatile int countNeg = 0;    //counts in the negative direction
-int target = 45;              //target (in degrees) for tracker to move to
-int cal = 112;                //counts per degree
+const int target = 45;              //target (in degrees) for tracker to move to
+const int cal = 112;                //counts per degree
 volatile int count = 0;       //number of pulses from hall effect sensor on slew drive
 int deg = 0;                  //degrees moved from initial position
 int absp = 0;                 //absolute position
 boolean dir = true;           //true for clockwise, false for counter-clockwise
 
+RF24 radio(9, 10); // CE, CSN     //radio transmitting variables
+
+const byte address[6] = "00001";
+int receiving_value;
 
 void setup() {
   // put your setup code here, to run once
@@ -45,12 +52,22 @@ void setup() {
   
   Serial.begin(9600);
   attachInterrupt(digitalPinToInterrupt(2), magnet_detect, FALLING); //interrupt on pin 2 to detect hall sensor
+  radio.begin();
+  radio.openReadingPipe(0, address);
+  radio.startListening();
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  forward(target);                          //move actuator forward if position is less than target
-  backward(target);                         //move actuator backward if position is greater than target
+  if(radio.available()){
+    radio.read(&receiving_value, sizeof(receiving_value));
+    Serial.print("Receiving_value = ");
+    Serial.println(receiving_value);
+    forward(receiving_value);
+    backward(receiving_value);
+  }
+  //forward(target);                          //move actuator forward if absolute position is less than target
+  //backward(target);                         //move actuator backward if absolute position is greater than target
 
   //BUTTONS DO NOT CHANGE ABSOLUTE POSITION VARIABLE
   if(digitalRead(button4) == HIGH)          //retract actuator when button4 is pressed
