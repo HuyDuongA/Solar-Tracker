@@ -45,7 +45,7 @@ int a = 6.25;
 //SLEW variables
 volatile int countPosS = 0;    //counts in the positive direction (cw)
 volatile int countNegS = 0;    //counts in the negative direction (ccw)
-int targetS =  0;              //target (in degrees) for tracker to move to
+float targetS =  0;              //target (in degrees) for tracker to move to
 int calS = 112;                //counts per degree
 volatile int countS = 0;       //number of pulses from hall effect sensor on slew drive
 int degS = 0;                  //degrees moved from initial position
@@ -55,7 +55,7 @@ boolean dirS = true;           //true for clockwise, false for counter-clockwise
 //ACTUATOR variables
 volatile int countPosA = 0;    //counts in the positive direction (extend)
 volatile int countNegA = 0;    //counts in the negative direction (retract)
-int targetL = 0;          //target in inches for actuator to extend
+float targetL = 0;          //target in inches for actuator to extend
 int targetA =  0;              //target (in degrees) for tracker to move to
 int calA = 203; //????                  //counts per degree
 volatile int countA = 0;       //number of pulses from hall effect sensor on actuator
@@ -114,7 +114,7 @@ void setup() {
   SolarPosition::setTimeProvider(RTC.get);
 
   //initialize the lcd
-  lcd.init();  
+  lcd.begin();  
   //open the backlight 
   lcd.backlight(); 
 }
@@ -133,12 +133,16 @@ void loop() {
   Serial.println();
   delay(3000);
 
+  targetA = CalPoly.getSolarElevation(RTC.get());
+  targetS = CalPoly.getSolarAzimuth(RTC.get());
+
   targetL = sqrt(b*b+a*a-2*a*b*cos(targetA));
   
   forward(targetS);                          //move slew cw if position is less than target
   backward(targetS);                         //move slew ccw backward if position is greater than target
   extend(targetL);                           //extend actuator if position less than target
   retract(targetL);                          //retract actuator if position greater than target
+
 
   //BUTTONS DO NOT CHANGE ABSOLUTE POSITION VARIABLE
   if(digitalRead(button4) == HIGH)   {       //retract actuator when button4 is pressed
