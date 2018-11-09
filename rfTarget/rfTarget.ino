@@ -41,6 +41,7 @@
 //actuator lengths used to calculate from angle
 int b = 22.25;                
 int a = 6.25;
+int c = 6.25;
 
 //SLEW variables
 volatile int countPosS = 0;    //counts in the positive direction (cw)
